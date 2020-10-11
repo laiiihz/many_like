@@ -8,6 +8,7 @@ typedef BuildAnimation = Function(
   AnimationController controller,
 );
 
+///AnimateLikeWidget
 class AnimateLikeWidget extends StatefulWidget {
   ///The length of time this animation should last.
   final Duration duration;

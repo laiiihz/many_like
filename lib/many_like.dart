@@ -8,6 +8,7 @@ export 'animate_like_widget.dart';
 
 typedef PulseCallback = Function(int count);
 
+///Many Like Button
 class ManyLikeButton extends StatefulWidget {
   ///child
   ///
@@ -35,6 +36,7 @@ class ManyLikeButton extends StatefulWidget {
   /// long press callback
   final PulseCallback onLongPress;
 
+  /// every `tickCount` call the onLongPress
   final int tickCount;
 
   ManyLikeButton({

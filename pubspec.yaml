@@ -1,7 +1,6 @@
 name: many_like
-description: A new Flutter package.
+description: A widget like a tiktok like button write in pure flutter.Support custom animation.
 version: 0.0.1
-author:
 homepage: https://github.com/laiiihz/many_like
 
 environment:
