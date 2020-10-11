@@ -2,6 +2,7 @@ import 'dart:math';
 
 import 'package:flutter/material.dart';
 
+///BuildCustom Animation
 typedef BuildAnimation = Function(
   BuildContext context,
   Widget child,

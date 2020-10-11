@@ -6,6 +6,7 @@ import 'package:flutter/material.dart';
 import 'package:many_like/animate_like_widget.dart';
 export 'animate_like_widget.dart';
 
+///long press callback Function
 typedef PulseCallback = Function(int count);
 
 ///Many Like Button
@@ -21,6 +22,9 @@ class ManyLikeButton extends StatefulWidget {
   ///)
   ///```
   final Widget child;
+
+  ///the pop child
+  final Widget popChild;
 
   ///The length of time this animation should last.
   final Duration duration;
@@ -50,6 +54,10 @@ class ManyLikeButton extends StatefulWidget {
     this.longTapDuration = const Duration(milliseconds: 250),
     this.onLongPress,
     this.tickCount = 20,
+    this.popChild = const Icon(
+      Icons.favorite,
+      color: Colors.red,
+    ),
   }) : super(key: key);
 
   @override
@@ -96,6 +104,7 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
             duration: widget.duration,
             curve: widget.curve,
             key: ValueKey(e),
+            child: widget.popChild,
             onDestory: () {
               setState(() {
                 likeWidgets.remove(e);
