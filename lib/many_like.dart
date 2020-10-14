@@ -43,6 +43,12 @@ class ManyLikeButton extends StatefulWidget {
   /// every `tickCount` call the onLongPress
   final int tickCount;
 
+  /// tap only work first time
+  final bool tapCallbackOnlyOnce;
+
+  /// on tap button
+  final VoidCallback onTap;
+
   ManyLikeButton({
     Key key,
     this.child = const Icon(
@@ -58,6 +64,8 @@ class ManyLikeButton extends StatefulWidget {
       Icons.favorite,
       color: Colors.red,
     ),
+    this.tapCallbackOnlyOnce = true,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -67,6 +75,7 @@ class ManyLikeButton extends StatefulWidget {
 class _ManyLikeButtonState extends State<ManyLikeButton> {
   List<int> likeWidgets = [];
   Timer timer;
+  bool callbackOnlyOnce = false;
 
   @override
   void dispose() {
@@ -80,6 +89,12 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
       children: [
         GestureDetector(
           onTap: () {
+            if (widget.tapCallbackOnlyOnce) {
+              if (!callbackOnlyOnce) widget.onTap();
+              callbackOnlyOnce = true;
+            } else {
+              widget.onTap();
+            }
             setState(() {
               likeWidgets.add(DateTime.now().millisecond);
             });
