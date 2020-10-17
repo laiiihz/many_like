@@ -47,7 +47,10 @@ class ManyLikeButton extends StatefulWidget {
   final bool tapCallbackOnlyOnce;
 
   /// on tap button
-  final VoidCallback onTap;
+  final PulseCallback onTap;
+
+  ///tap delay
+  final Duration tapDelay;
 
   ManyLikeButton({
     Key key,
@@ -66,6 +69,7 @@ class ManyLikeButton extends StatefulWidget {
     ),
     this.tapCallbackOnlyOnce = true,
     this.onTap,
+    this.tapDelay = const Duration(milliseconds: 2000),
   }) : super(key: key);
 
   @override
@@ -76,10 +80,13 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
   List<int> likeWidgets = [];
   Timer timer;
   bool callbackOnlyOnce = false;
+  Timer tapTimer;
+  int singleTap = 0;
 
   @override
   void dispose() {
     timer?.cancel();
+    tapTimer?.cancel();
     super.dispose();
   }
 
@@ -89,11 +96,16 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
       children: [
         GestureDetector(
           onTap: () {
+            singleTap++;
             if (widget.tapCallbackOnlyOnce) {
-              if (!callbackOnlyOnce) widget.onTap();
+              if (!callbackOnlyOnce) widget.onTap(1);
               callbackOnlyOnce = true;
             } else {
-              widget.onTap();
+              tapTimer.cancel();
+              tapTimer = Timer(widget.tapDelay, () {
+                widget.onTap(singleTap);
+                singleTap = 0;
+              });
             }
             setState(() {
               likeWidgets.add(DateTime.now().millisecond);
