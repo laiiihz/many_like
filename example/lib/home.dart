@@ -23,6 +23,8 @@ class _HomePageState extends State<HomePage> {
             onLongPress: (count) {
               print(count);
             },
+            longTapDuration: Duration(milliseconds: 150),
+            extraLikeCount: 10,
             child: Icon(
               Icons.link,
               size: 40,

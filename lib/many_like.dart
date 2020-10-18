@@ -13,6 +13,8 @@ typedef PulseCallback = Function(int count);
 class ManyLikeButton extends StatefulWidget {
   ///child
   ///
+  ///子组件 默认为Material红色爱心
+  ///
   ///default like button child is a material favorite icon with red color
   ///
   ///```
@@ -23,12 +25,17 @@ class ManyLikeButton extends StatefulWidget {
   ///```
   final Widget child;
 
+  ///弹出爱心组件
   ///the pop child
   final Widget popChild;
 
+  ///动效显示时长
+  ///
   ///The length of time this animation should last.
   final Duration duration;
 
+  ///长按按钮 每个爱心发射的时间间隔
+  ///
   ///The length of time that user on long press at the button,
   ///too small value may cause performance issue,
   ///bese value is more than 300 millsecond
@@ -37,20 +44,33 @@ class ManyLikeButton extends StatefulWidget {
   ///the Curve use in widget
   final Curve curve;
 
+  ///长按按钮回调
+  ///
   /// long press callback
   final PulseCallback onLongPress;
 
+  ///长按时按钮 爱心发射回调次数
+  ///
   /// every `tickCount` call the onLongPress
   final int tickCount;
 
+  ///只在第一次响应按钮点击
+  ///
   /// tap only work first time
   final bool tapCallbackOnlyOnce;
 
+  ///按钮点击回调
+  ///
   /// on tap button
   final PulseCallback onTap;
 
+  ///按钮点击延迟
+  ///
   ///tap delay
   final Duration tapDelay;
+
+  ///每次点击额外的爱心
+  final int extraLikeCount;
 
   ManyLikeButton({
     Key key,
@@ -70,6 +90,7 @@ class ManyLikeButton extends StatefulWidget {
     this.tapCallbackOnlyOnce = true,
     this.onTap,
     this.tapDelay = const Duration(milliseconds: 2000),
+    this.extraLikeCount = 0,
   }) : super(key: key);
 
   @override
@@ -90,6 +111,18 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
     super.dispose();
   }
 
+  giveAShot(int shot) {
+    if (shot > 0)
+      Future.delayed(widget.longTapDuration, () {
+        if (mounted)
+          setState(() {
+            likeWidgets.add(DateTime.now().millisecond);
+          });
+      }).then((_) {
+        giveAShot(shot - 1);
+      });
+  }
+
   @override
   Widget build(BuildContext context) {
     return Stack(
@@ -98,15 +131,16 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
           onTap: () {
             singleTap++;
             if (widget.tapCallbackOnlyOnce) {
-              if (!callbackOnlyOnce) widget.onTap(1);
+              if (!callbackOnlyOnce && widget.onTap != null) widget.onTap(1);
               callbackOnlyOnce = true;
             } else {
-              tapTimer.cancel();
+              tapTimer?.cancel();
               tapTimer = Timer(widget.tapDelay, () {
-                widget.onTap(singleTap);
+               if(widget.onTap != null) widget.onTap(singleTap);
                 singleTap = 0;
               });
             }
+            giveAShot(widget.extraLikeCount);
             setState(() {
               likeWidgets.add(DateTime.now().millisecond);
             });
@@ -123,7 +157,7 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
             });
           },
           onLongPressEnd: (detail) {
-            timer.cancel();
+            timer?.cancel();
           },
         )
       ]..addAll(likeWidgets.map((e) {
