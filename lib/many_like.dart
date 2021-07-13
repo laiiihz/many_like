@@ -47,7 +47,7 @@ class ManyLikeButton extends StatefulWidget {
   ///长按按钮回调
   ///
   /// long press callback
-  final PulseCallback onLongPress;
+  final PulseCallback? onLongPress;
 
   ///长按时按钮 爱心发射回调次数
   ///
@@ -62,7 +62,7 @@ class ManyLikeButton extends StatefulWidget {
   ///按钮点击回调
   ///
   /// on tap button
-  final PulseCallback onTap;
+  final PulseCallback? onTap;
 
   ///按钮点击延迟
   ///
@@ -73,7 +73,7 @@ class ManyLikeButton extends StatefulWidget {
   final int extraLikeCount;
 
   ManyLikeButton({
-    Key key,
+    Key? key,
     this.child = const Icon(
       Icons.favorite,
       color: Colors.red,
@@ -99,9 +99,9 @@ class ManyLikeButton extends StatefulWidget {
 
 class _ManyLikeButtonState extends State<ManyLikeButton> {
   List<int> likeWidgets = [];
-  Timer timer;
+  Timer? timer;
   bool callbackOnlyOnce = false;
-  Timer tapTimer;
+  Timer? tapTimer;
   int singleTap = 0;
 
   @override
@@ -111,16 +111,17 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
     super.dispose();
   }
 
-  giveAShot(int shot) {
-    if (shot > 0)
-      Future.delayed(widget.longTapDuration, () {
-        if (mounted)
+  giveAShot(int shot) async {
+    if (shot > 0) {
+      await Future.delayed(widget.longTapDuration, () {
+        if (mounted) {
           setState(() {
             likeWidgets.add(DateTime.now().millisecond);
           });
-      }).then((_) {
-        giveAShot(shot - 1);
+        }
       });
+      await giveAShot(shot - 1);
+    }
   }
 
   @override
@@ -131,12 +132,12 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
           onTap: () {
             singleTap++;
             if (widget.tapCallbackOnlyOnce) {
-              if (!callbackOnlyOnce && widget.onTap != null) widget.onTap(1);
+              if (!callbackOnlyOnce && widget.onTap != null) widget.onTap!(1);
               callbackOnlyOnce = true;
             } else {
               tapTimer?.cancel();
               tapTimer = Timer(widget.tapDelay, () {
-               if(widget.onTap != null) widget.onTap(singleTap);
+                if (widget.onTap != null) widget.onTap!(singleTap);
                 singleTap = 0;
               });
             }
@@ -153,7 +154,7 @@ class _ManyLikeButtonState extends State<ManyLikeButton> {
               });
               if (timer.tick % widget.tickCount == 0 &&
                   widget.onLongPress != null)
-                widget.onLongPress(widget.tickCount);
+                widget.onLongPress!(widget.tickCount);
             });
           },
           onLongPressEnd: (detail) {

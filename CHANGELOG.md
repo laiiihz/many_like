@@ -1,5 +1,7 @@
 # CHANGELOG
 
+## [1.0.0] null safety support.
+
 ## [0.0.6] fix  The method 'cancel' was called on null
 
 ## [0.0.5] add extra like count

@@ -24,7 +24,7 @@ class _HomePageState extends State<HomePage> {
               print(count);
             },
             longTapDuration: Duration(milliseconds: 150),
-            extraLikeCount: 10,
+            extraLikeCount: 0,
             child: Icon(
               Icons.link,
               size: 40,

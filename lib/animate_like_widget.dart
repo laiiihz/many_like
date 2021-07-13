@@ -21,9 +21,9 @@ class AnimateLikeWidget extends StatefulWidget {
   final Widget child;
 
   ///call onDestory when animation done
-  final VoidCallback onDestory;
+  final VoidCallback? onDestory;
   AnimateLikeWidget({
-    Key key,
+    Key? key,
     this.duration = const Duration(milliseconds: 2000),
     this.child = const Icon(Icons.favorite, color: Colors.red),
     this.onDestory,
@@ -36,9 +36,9 @@ class AnimateLikeWidget extends StatefulWidget {
 
 class _AnimateLikeWidgetState extends State<AnimateLikeWidget>
     with TickerProviderStateMixin {
-  AnimationController _animationController;
-  Tween<Offset> _offsetTween;
-  Animation<Offset> _offsetAnimation;
+  AnimationController? _animationController;
+  late Tween<Offset> _offsetTween;
+  late Animation<Offset> _offsetAnimation;
   double _randomSize = 0;
 
   @override
@@ -54,11 +54,11 @@ class _AnimateLikeWidgetState extends State<AnimateLikeWidget>
       end: offset,
     );
     _offsetAnimation = _offsetTween.animate(CurvedAnimation(
-      parent: _animationController,
+      parent: _animationController!,
       curve: Curves.easeInOutCubic,
     ));
-    _animationController.forward().then((_) {
-      widget.onDestory();
+    _animationController!.forward().then((_) {
+      widget.onDestory!();
     });
   }
 
@@ -71,7 +71,7 @@ class _AnimateLikeWidgetState extends State<AnimateLikeWidget>
   @override
   Widget build(BuildContext context) {
     return AnimatedBuilder(
-      animation: _animationController,
+      animation: _animationController!,
       builder: (context, child) {
         return Opacity(
           opacity: opacity,
@@ -89,11 +89,11 @@ class _AnimateLikeWidgetState extends State<AnimateLikeWidget>
   }
 
   double get opacity {
-    if (_animationController.value < 0.2) {
-      return _animationController.value / 0.2;
+    if (_animationController!.value < 0.2) {
+      return _animationController!.value / 0.2;
     }
-    if (_animationController.value > 0.8) {
-      return (1 - _animationController.value) / 0.2;
+    if (_animationController!.value > 0.8) {
+      return (1 - _animationController!.value) / 0.2;
     } else
       return 1;
   }
@@ -106,6 +106,6 @@ class _AnimateLikeWidgetState extends State<AnimateLikeWidget>
   }
 
   double get size {
-    return 1 + _animationController.value * _randomSize;
+    return 1 + _animationController!.value * _randomSize;
   }
 }

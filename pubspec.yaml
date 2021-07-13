@@ -1,10 +1,10 @@
 name: many_like
 description: A widget like a tiktok like button write in pure flutter.Support custom animation.
-version: 0.0.6
+version: 1.0.0
 homepage: https://github.com/laiiihz/many_like
 
 environment:
-  sdk: ">=2.7.0 <3.0.0"
+  sdk: '>=2.12.0 <3.0.0'
   flutter: ">=1.17.0 <2.0.0"
 
 dependencies:
