@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:many_like/many_like.dart';
 
 class HomePage extends StatefulWidget {
-  HomePage({Key key}) : super(key: key);
+  HomePage({Key? key}) : super(key: key);
 
   @override
   _HomePageState createState() => _HomePageState();
